@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de Enlaces con Búsqueda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        #search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #search-input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        #search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #directory {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .thumbnail {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            width: calc(33.33% - 20px);
+            max-width: 300px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .thumbnail:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .thumbnail p {
+            padding: 10px;
+            margin: 0;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+
+        @media screen and (max-width: 768px) {
+            .thumbnail {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .thumbnail {
+                width: calc(100% - 20px);
+            }
+        }
+      #externas{background:#ffffff;}
+.ext{width: 120px; height: 70px; border:1px solid #000000;margin:5px 0px 5px 5px;}
+    </style>
+</head>
+<body>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Buscar enlaces...">
+    </div>
+
+    <div id="directory">
+        <!-- Miniaturas aparecerán aquí -->
+    </div>
+
+<script>
+    const links = [
+        { url: 'https://ibarrajuegos.glitch.me/gato.html', name: 'Ibarra GaTo' },
+        { url: 'https://ibarrajuegos.glitch.me/serpiente1.5.html', name: 'Ibarra Serpiente 1.5' },
+        { url: 'https://ibarrajuegos.glitch.me/serpiente1.0.html', name: 'Ibarra Serpiente 1.0' },
+        { url: 'https://www.msn.com/es-mx/play?cgfrom=cg_dsb_idx_2_gt_&ocid=winpsearchboxexpcta2&pc=DSBPC&cvid=82359596ae9a47708eb1449fa1269a7d&nclid=39901C00369BD703E6D9DC29A4CC0252&ts=1718030453871&nclidts=1718030453&tsms=871&ei=331', name: 'Juegos MSN' },
+        { url: 'https://ibarrajuegos.glitch.me/runibarra.html', name: 'Ibarra Corre' },
+        { url: 'https://ibarrajuegos.glitch.me/ibarranadando.html', name: 'Ibarra en el agua' },
+        { url: 'https://kerigmanma.glitch.me/', name: 'Kerigma NMA' },
+        { url: 'https://ibarrajuegos.glitch.me/cuca.html', name: 'Aplasta cucarachas', img: 'https://cdn.glitch.global/f5039c61-0f51-4c02-b324-4e57821e69f7/CUCARACHA.gif?v=1719615865850'},
+        { url: 'https://youtube.com', name: 'YouTube', img: 'https://cdn.glitch.global/478e2a53-34bb-400e-bd21-7a5856270f87/youtubeok.jpg?v=1712770218929' },
+        { url: 'https://www.google.com.mx/?hl=es', name: 'Google', img: 'https://cdn.glitch.global/478e2a53-34bb-400e-bd21-7a5856270f87/googleok.jpg?v=1712770219443' },
+    ];
+
+    // Organizar enlaces por nombre en orden alfabético
+    links.sort((a, b) => a.name.localeCompare(b.name));
+
+    const directoryContainer = document.getElementById('directory');
+
+    // Función para mostrar los enlaces que coinciden con la búsqueda
+    function renderLinks(searchQuery = '') {
+        directoryContainer.innerHTML = ''; // Limpiar el contenedor
+
+        links.forEach(link => {
+            // Si el nombre del enlace coincide con la búsqueda o la búsqueda está vacía
+            if (link.name.toLowerCase().includes(searchQuery.toLowerCase()) || searchQuery === '') {
+                const thumbnailElement = document.createElement('div');
+                thumbnailElement.className = 'thumbnail';
+
+                // Crear un contenedor para la imagen y el texto
+                const linkElement = document.createElement('a');
+                linkElement.href = link.url;
+                linkElement.style.textDecoration = 'none';
+                linkElement.style.color = 'inherit';
+
+                // Agregar imagen si está disponible
+                if (link.img) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = link.img;
+                    imgElement.alt = link.name;
+                    imgElement.style.width = '100%';
+                    imgElement.style.borderRadius = '8px 8px 0 0';
+                    linkElement.appendChild(imgElement);
+                }
+
+                const pElement = document.createElement('p');
+                pElement.textContent = link.name;
+
+                linkElement.appendChild(pElement);
+                thumbnailElement.appendChild(linkElement);
+
+                directoryContainer.appendChild(thumbnailElement);
+            }
+        });
+    }
+
+    // Mostrar los enlaces por defecto al cargar la página
+    renderLinks();
+
+    // Escuchar cambios en el campo de búsqueda
+    document.getElementById('search-input').addEventListener('input', event => {
+        renderLinks(event.target.value);
+    });
+</script>
+
+</body>
+</html>
